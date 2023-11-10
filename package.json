@@ -2,7 +2,7 @@
   "name": "raytracer-on-browser",
   "version": "0.0.1",
   "description": "",
-  "keywords": "raytracer",
+  "keywords": ["raytracer"],
   "license": "",
   "author": "",
   "scripts": {
