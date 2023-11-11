@@ -1,3 +1,5 @@
+const {compare_double} = require("./util");
+
 class Tuple {
   x = 0;
   y = 0;
@@ -78,6 +80,13 @@ class Tuple {
 
   floor() {
     return new Tuple(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z), Math.floor(this.w))
+  }
+
+  equals(other) {
+    return compare_double(this.x, other.x) &&
+      compare_double(this.y, other.y) &&
+      compare_double(this.z, other.z) &&
+      compare_double(this.w, other.w)
   }
 }
 
