@@ -59,7 +59,7 @@ class Tuple {
 
   normalize() {
     let mag = this.magnitude()
-    return new Tuple(this.x / mag, this.y / mag, this.z / mag, this.w / mag)
+    return new Tuple(this.x / mag, this.y / mag, this.z / mag, 0)
   }
 
   dot(other) {

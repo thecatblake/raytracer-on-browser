@@ -99,6 +99,13 @@ test("Multiplying by a translation matrix", () => {
   expect(A.mul(p)).toEqual(point(2, 1, 1))
 })
 
+test("Translation does not affect vectors", () => {
+  let p = vector(1, 0, 0)
+  let A = translation_matrix(vector(1, 1, 1))
+
+  expect(A.mul(p)).toEqual(p)
+})
+
 test("Multiplying by a scaling matrix", () => {
   let p = point(1, 0, 0)
   let A = scaling_matrix(vector(2, 2, 2))

@@ -1,3 +1,2 @@
-const {draw_trajectory} = require("./trajectory")
-
-draw_trajectory()
+const {draw_sphere} = require("./sphere_image");
+draw_sphere()
