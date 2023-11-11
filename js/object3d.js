@@ -7,36 +7,42 @@ const {
   translation_matrix
 } = require("./matrix")
 const {Intersection} = require("./intersection");
+const {Material} = require("./material");
 
 class Object3D {
   transform = identity
+  material = new Material()
 
   intersect() {
     return new Intersection(0, null)
   }
 
+  normal_at(p) {
+    return p
+  }
+
   translate(v) {
-    this.transform = this.transform.mul(translation_matrix(v))
+    this.transform = translation_matrix(v).mul(this.transform)
     return this
   }
 
   scale(v) {
-    this.transform = this.transform.mul(scaling_matrix(v))
+    this.transform = scaling_matrix(v).mul(this.transform)
     return this
   }
 
   rotate_x(rad) {
-    this.transform = this.transform.mul(rotation_x_matrix(rad))
+    this.transform = rotation_x_matrix(rad).mul(this.transform)
     return this
   }
 
   rotate_y(rad) {
-    this.transform = this.transform.mul(rotation_y_matrix(rad))
+    this.transform = rotation_y_matrix(rad).mul(this.transform)
     return this
   }
 
   rotate_z(rad) {
-    this.transform = this.transform.mul(rotation_z_matrix(rad))
+    this.transform = rotation_z_matrix(rad).mul(this.transform)
     return this
   }
 }

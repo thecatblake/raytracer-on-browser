@@ -21,6 +21,12 @@ class Sphere extends Object3D {
       new Intersection((-b + s_d)/a, this)
     ]
   }
+
+  normal_at(p) {
+    let object_normal = this.transform.inverse().mul(p)
+    let world_normal = this.transform.inverse().T().mul(object_normal)
+    return world_normal.normalize()
+  }
 }
 
 module.exports = {Sphere}

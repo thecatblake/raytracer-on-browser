@@ -60,3 +60,26 @@ test("Intersecting a scaled sphere with a ray", () => {
   expect(xs[0].t).toBe(3)
   expect(xs[1].t).toBe(7)
 })
+
+test("THe normal is a normalized vector", () => {
+  let s = new Sphere()
+  let n = s.normal_at(point(Math.sqrt(3), Math.sqrt(3), Math.sqrt(3)))
+
+  expect(n.equals(vector(Math.sqrt(3)/3, Math.sqrt(3)/3, Math.sqrt(3)/3))).toBeTruthy()
+})
+
+test("Computing the normal on a translated sphere", () => {
+  let s = new Sphere()
+  s.translate(vector(0, 1, 0))
+  let n = s.normal_at(point(0, 1.70711, -0.70711))
+
+  expect(n.equals(vector(0, 0.70711, -0.70711))).toBeTruthy()
+})
+
+test("Computing the normal on a transformed sphere", () => {
+  let s = new Sphere()
+  s.rotate_z(Math.PI / 5).scale(vector(1, 0.5, 1))
+  let n = s.normal_at(point(0, Math.sqrt(2)/2, -Math.sqrt(2)/2))
+
+  expect(n.equals(vector(0, 0.97014, -0.24254))).toBeTruthy()
+})

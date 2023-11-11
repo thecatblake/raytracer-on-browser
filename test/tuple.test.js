@@ -98,3 +98,10 @@ test("The cross product of two vectors", () => {
   expect(Tuple.cross(b, a)).toEqual(t2)
 
 })
+
+test("Reflecting a vector off a slanted sruface", () => {
+  let v = vector(0, -1, 0)
+  let n = vector(Math.sqrt(2)/2, Math.sqrt(2)/2, 0)
+
+  expect(v.reflect(n).equals(vector(1, 0, 0)))
+})

@@ -78,6 +78,10 @@ class Tuple {
     return a.cross(b)
   }
 
+  reflect(normal) {
+    return this.sub(normal.sc_mul(2 * this.dot(normal)))
+  }
+
   floor() {
     return new Tuple(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z), Math.floor(this.w))
   }
