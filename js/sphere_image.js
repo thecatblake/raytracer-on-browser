@@ -1,44 +1,49 @@
 const {Canvas} = require("./canvas");
-const {point, Tuple, vector} = require("./tuple");
-const {Ray} = require("./ray");
+const {point, vector} = require("./tuple");
 const {Sphere} = require("./sphere");
-const {PointLight, lighting} = require("./light");
-const {Intersection} = require("./intersection");
+const {PointLight} = require("./light");
+const {World} = require("./world");
+const {Camera} = require("./camera");
+const {view_transform} = require("./matrix");
 
 function draw_sphere() {
   const canvasElement = document.getElementById("canvas")
 
   const canvas = new Canvas(canvasElement)
 
-  let origin = point(0, 0, -1000)
-  let w_half = Math.floor(canvas.w / 2)
-  let h_half = Math.floor(canvas.h / 2)
+  let floor = new Sphere()
+  floor.scale(vector(10, 0.01, 10))
+  floor.material.color = vector(1, 0.9, 0.9)
+  floor.material.specular = 0
 
-  let s = new Sphere()
-  s.material.color = vector(1, 0.2, 1)
-  s.scale(vector(100, 100, 100))
+  let left_wall = new Sphere()
+  left_wall.scale(vector(10, 0.01, 10)).rotate_x(Math.PI/2).rotate_y(-Math.PI/4).translate(vector(0, 0, 5))
+  left_wall.material = floor.material
 
-  let light = new PointLight(point(-1000, 1000, -1000), vector(1, 1, 1))
+  let right_wall = new Sphere()
+  right_wall.scale(vector(10, 0.01, 10)).rotate_x(Math.PI/2).rotate_y(Math.PI/4).translate(vector(0, 0, 5))
+  right_wall.material = floor.material
 
-  for(let y=-h_half; y < h_half; y++) {
-    for(let x = -w_half; x < w_half; x++) {
-      let p = point(x, y, 0)
-      let r = new Ray(origin, Tuple.sub(p, origin).normalize())
+  let middle = new Sphere()
+  middle.translate(vector(-0.5, 1, 0.5))
+  middle.material.color = vector(0, 0, 1)
 
-      let xs = s.intersect(r)
+  let right = new Sphere()
+  right.scale(vector(0.5, 0.5, 0.5)).translate(vector(1.5, 0.5, -0.5))
+  right.material.color = vector(0, 1, 0)
 
-      let eye = r.direction.neg()
+  let left = new Sphere()
+  left.scale(vector(0.33, 0.33, 0.33)).translate(vector(-1.5, 0.33, -0.75))
+  left.material.color = vector(1, 0, 0)
 
-      if(xs.length === 0)
-        continue
+  let light = new PointLight(point(-10, 10, -10), vector(1, 1, 1))
 
-      p = r.at(Intersection.hit(xs).t)
-      let normal = s.normal_at(p)
+  let w = new World([floor, left_wall, right_wall, middle, right, left], light)
 
-      let color = lighting(xs[0].obj.material, light, p, eye, normal)
-      canvas.write_pixel(x + w_half, h_half - y, color)
-    }
-  }
+  let c = new Camera(canvas.h, canvas.w, Math.PI/3)
+  c.transform = view_transform(point(0, 1.5, -5), point(0, 1, 0), vector(0, 1, 0))
+
+  c.render(canvas, w)
 
   canvas.draw()
 }

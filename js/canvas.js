@@ -5,7 +5,7 @@ class Canvas {
   h = 0
   canvas = null
   ctx = null
-  pixels = []
+  pixels = null
   constructor(canvasDocument) {
     this.w = canvasDocument.width
     this.h = canvasDocument.height
@@ -35,6 +35,10 @@ class Canvas {
 
   at(x, y) {
     return (y * this.w + x ) * 4
+  }
+
+  set(image) {
+    this.pixels.data = image
   }
 
   draw() {

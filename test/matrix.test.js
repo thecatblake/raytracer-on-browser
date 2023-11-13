@@ -1,4 +1,6 @@
-const {Matrix, identity, translation_matrix, scaling_matrix, rotation_x_matrix, rotation_y_matrix, rotation_z_matrix} = require("../js/matrix")
+const {Matrix, identity, translation_matrix, scaling_matrix, rotation_x_matrix, rotation_y_matrix, rotation_z_matrix,
+  view_transform
+} = require("../js/matrix")
 const {Tuple, point, vector} = require("../js/tuple");
 
 test("Multiplying two matrices", () => {
@@ -132,4 +134,56 @@ test("Multiplying by a rotation z matrix", () => {
   let A = rotation_z_matrix(Math.PI / 2)
 
   expect(A.mul(p).equals(point(-1, 1, 1))).toBeTruthy()
+})
+
+test("Chaining transformations", () => {
+  let p = point(1, 0, 0)
+  let A = rotation_z_matrix(Math.PI / 2).mul(rotation_x_matrix(Math.PI / 2))
+  console.log(A.mul(p))
+
+  expect(A.mul(p).equals(point(0, 1, 0))).toBeTruthy()
+})
+
+test("The transformation matrix for the default orientation", () => {
+  let from = point(0, 0, 0)
+  let to = point(0, 0, -1)
+  let up = vector(0, 1, 0)
+  let t = view_transform(from, to, up)
+
+  expect(t.equals(identity)).toBeTruthy()
+})
+
+test("A view transformation matrix looking in positive z direction", () => {
+  let from = point(0, 0, 0)
+  let to = point(0, 0, 1)
+  let up = vector(0, 1, 0)
+  let t = view_transform(from, to, up)
+
+  expect(t.equals(scaling_matrix(vector(-1, 1, -1)))).toBeTruthy()
+})
+
+
+test("The view transformation moves the world", () => {
+  let from = point(0, 0, 8)
+  let to = point(0, 0, -1)
+  let up = vector(0, 1, 0)
+  let t = view_transform(from, to, up)
+
+  expect(t.equals(translation_matrix(vector(0, 0, -8)))).toBeTruthy()
+})
+
+test("An arbitrary view transformation", () => {
+  let from = point(1,3,2)
+  let to = point(4,-2,8)
+  let up = vector(1,1,0)
+  let t = view_transform(from, to, up)
+
+  let m = new Matrix([
+    -0.50709, 0.50709, 0.67612, -2.36643,
+    0.76772, 0.60609, 0.12122, -2.82843,
+    -0.35857, 0.59761, -0.71714, 0.00000,
+    0.00000, 0.00000, 0.00000, 1.00000
+  ])
+
+  expect(t.equals(m)).toBeTruthy()
 })

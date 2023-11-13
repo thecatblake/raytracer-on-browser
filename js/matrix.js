@@ -278,4 +278,19 @@ function rotation_z_matrix(rad) {
   ])
 }
 
-module.exports = {Matrix, identity, translation_matrix, scaling_matrix, rotation_x_matrix, rotation_y_matrix, rotation_z_matrix}
+function view_transform(from, to, up) {
+  let forward = Tuple.sub(to, from).normalize()
+  let left = Tuple.cross(forward, up.normalize())
+  let true_up = Tuple.cross(left, forward)
+
+  let orientation = new Matrix([
+    left.x, left.y, left.z, 0,
+    true_up.x, true_up.y, true_up.z, 0,
+    -forward.x, -forward.y, -forward.z, 0,
+    0, 0, 0, 1
+  ]);
+
+  return orientation.mul(translation_matrix(from.neg()))
+}
+
+module.exports = {Matrix, identity, translation_matrix, scaling_matrix, rotation_x_matrix, rotation_y_matrix, rotation_z_matrix, view_transform}
