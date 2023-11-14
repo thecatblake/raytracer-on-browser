@@ -9,7 +9,7 @@ class PointLight {
   }
 }
 
-function lighting(material, light, point, eyev, normalv) {
+function lighting(material, light, point, eyev, normalv, in_shadow=false) {
   let e_c, lightv, reflectv;
 
   e_c = Tuple.mul(material.color, light.intensity)
@@ -36,6 +36,9 @@ function lighting(material, light, point, eyev, normalv) {
       specular = light.intensity.sc_mul(material.specular * factor)
     }
   }
+
+  if (in_shadow)
+    return ambient;
 
   return ambient.add(diffuse).add(specular)
 }

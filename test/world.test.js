@@ -105,3 +105,47 @@ test("The color with an intersection behind the ray", () => {
   let c = w.color_at(r)
   expect(c.equals(inner.material.color)).toBeTruthy()
 })
+
+test("There is no shadow when nothing is collinear with point and light", () => {
+  let w = default_world()
+  let p = point(0, 10, 0)
+
+  expect(w.is_shadowed(p)).toBeFalsy()
+})
+
+test("The shadow when an object is between point and the light", () => {
+  let w = default_world()
+  let p = point(10, -10, 10)
+
+  expect(w.is_shadowed(p)).toBeTruthy()
+})
+
+test("There is no shadow when an object is behind the light", () => {
+  let w = default_world()
+  let p = point(-20, 20, -20)
+
+  expect(w.is_shadowed(p)).toBeFalsy()
+})
+
+test("There is no shadow when an object is behind the point", () => {
+  let w = default_world()
+  let p = point(-2, 2, -2)
+
+  expect(w.is_shadowed(p)).toBeFalsy()
+})
+
+test("shade_hit() is given an intersection in shadow", () => {
+  let light = new PointLight(point(0, 0, -10), vector(1, 1, 1))
+  let s1 = new Sphere()
+  let s2 = new Sphere()
+  s2.translate(vector(0, 0, 10))
+  let w = new World([s1, s2], light)
+
+  let r = new Ray(point(0, 0, 5), vector(0, 0, 1))
+  let i = new Intersection(4, s2)
+  let comps = prepare_computation(i, r)
+  let c = w.shade_hit(comps)
+
+  expect(c.equals(vector(0.1, 0.1, 0.1))).toBeTruthy()
+})
+
