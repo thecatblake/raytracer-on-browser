@@ -6,8 +6,9 @@ class Material {
   diffuse = 0.9
   specular = 0.9
   shininess = 200
+  pattern = null
 
-  constructor(color, ambient, diffuse, specular, shininess) {
+  constructor(color, ambient, diffuse, specular, shininess, pattern=null) {
     if(color)
       this.color = color
     if(ambient)
@@ -18,6 +19,8 @@ class Material {
       this.specular = specular
     if(shininess)
       this.shininess = shininess
+    if(pattern)
+      this.pattern = pattern
   }
 }
 

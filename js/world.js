@@ -25,7 +25,7 @@ class World {
 
   shade_hit(comps) {
     let shadowed = this.is_shadowed(comps.over_point)
-    return lighting(comps.obj.material, this.light, comps.point, comps.eyev, comps.normalv, shadowed)
+    return lighting(comps.obj.material, comps.obj, this.light, comps.point, comps.eyev, comps.normalv, shadowed)
   }
 
   color_at(r) {

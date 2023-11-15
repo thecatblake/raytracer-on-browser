@@ -1,2 +1,2 @@
-const {draw_sphere} = require("./sphere_image");
-draw_sphere()
+const {draw_plane} = require("./plane_image");
+draw_plane()

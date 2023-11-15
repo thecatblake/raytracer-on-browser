@@ -9,10 +9,15 @@ class PointLight {
   }
 }
 
-function lighting(material, light, point, eyev, normalv, in_shadow=false) {
+function lighting(material, obj, light, point, eyev, normalv, in_shadow=false) {
+  let color = material.color
+
+  if(material.pattern != null)
+    color = material.pattern.at_obj(obj, point)
+
   let e_c, lightv, reflectv;
 
-  e_c = Tuple.mul(material.color, light.intensity)
+  e_c = Tuple.mul(color, light.intensity)
 
   lightv = Tuple.sub(light.position, point).normalize()
 

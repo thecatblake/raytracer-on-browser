@@ -139,7 +139,6 @@ test("Multiplying by a rotation z matrix", () => {
 test("Chaining transformations", () => {
   let p = point(1, 0, 0)
   let A = rotation_z_matrix(Math.PI / 2).mul(rotation_x_matrix(Math.PI / 2))
-  console.log(A.mul(p))
 
   expect(A.mul(p).equals(point(0, 1, 0))).toBeTruthy()
 })

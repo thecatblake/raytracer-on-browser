@@ -6,18 +6,31 @@ const {
   scaling_matrix,
   translation_matrix
 } = require("./matrix")
-const {Intersection} = require("./intersection");
 const {Material} = require("./material");
 
 class Object3D {
   transform = identity
   material = new Material()
 
-  intersect() {
-    return new Intersection(0, null)
+  intersect(ray) {
+    let local_ray = ray.transform(this.transform.inverse())
+    return this.local_intersect(local_ray)
+  }
+
+  local_intersect() {
+    return []
   }
 
   normal_at(p) {
+    let transform_inv = this.transform.inverse()
+    let local_point = transform_inv.mul(p)
+    let local_normal = this.local_normal_at(local_point)
+    let world_normal = transform_inv.T().mul(local_normal)
+    world_normal.w = 0
+    return world_normal.normalize()
+  }
+
+  local_normal_at(p) {
     return p
   }
 

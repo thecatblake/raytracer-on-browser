@@ -3,11 +3,10 @@ const {Tuple} = require("./tuple");
 const {Intersection} = require("./intersection");
 
 class Sphere extends Object3D {
-  intersect(ray) {
-    let r = ray.transform(this.transform.inverse())
-    let a = Tuple.dot(r.direction, r.direction)
-    let b = Tuple.dot(r.origin, r.direction)
-    let c = Tuple.dot(r.origin, r.origin) - 1
+  local_intersect(ray) {
+    let a = Tuple.dot(ray.direction, ray.direction)
+    let b = Tuple.dot(ray.origin, ray.direction)
+    let c = Tuple.dot(ray.origin, ray.origin) - 1
 
     let discriminant = b*b - a*c
 
@@ -22,10 +21,8 @@ class Sphere extends Object3D {
     ]
   }
 
-  normal_at(p) {
-    let object_normal = this.transform.inverse().mul(p)
-    let world_normal = this.transform.inverse().T().mul(object_normal)
-    return world_normal.normalize()
+  local_normal_at(p) {
+    return p
   }
 }
 
