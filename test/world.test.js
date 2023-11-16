@@ -4,6 +4,7 @@ const {Sphere} = require("../js/sphere");
 const {World, prepare_computation} = require("../js/world");
 const {Ray} = require("../js/ray");
 const {Intersection} = require("../js/intersection");
+const {Plane} = require("../js/plane");
 
 function default_world() {
   let light = new PointLight(point(-10, 10, -10), vector(1, 1, 1))
@@ -61,7 +62,7 @@ test("Shading an intersection", () => {
   let shape = w.objects[0]
   let i = new Intersection(4, shape)
   let comps = prepare_computation(i, r)
-  let c = w.shade_hit(comps)
+  let c = w.shade_hit(comps, 1)
 
   expect(c.equals(vector(0.38066, 0.47583, 0.2855))).toBeTruthy()
 })
@@ -73,7 +74,7 @@ test("Shading an intersection from the inside", () => {
   let shape = w.objects[1]
   let i = new Intersection(0.5, shape)
   let comps = prepare_computation(i, r)
-  let c = w.shade_hit(comps)
+  let c = w.shade_hit(comps, 1)
 
   expect(c.equals(vector(0.90498, 0.90498, 0.90498))).toBeTruthy()
 })
@@ -82,7 +83,7 @@ test("The color when a ray misses", () => {
   let w = default_world()
   let r = new Ray(point(0, 0, -5), vector(0, 1, 0))
 
-  let c = w.color_at(r)
+  let c = w.color_at(r, 1)
   expect(c.equals(vector(0, 0, 0))).toBeTruthy()
 })
 
@@ -90,7 +91,7 @@ test("The color when a ray hits", () => {
   let w = default_world()
   let r = new Ray(point(0, 0, -5), vector(0, 0, 1))
 
-  let c = w.color_at(r)
+  let c = w.color_at(r, 1)
   expect(c.equals(vector(0.38066, 0.47583, 0.2855))).toBeTruthy()
 })
 
@@ -102,7 +103,7 @@ test("The color with an intersection behind the ray", () => {
   inner.material.ambient = 1
   let r = new Ray(point(0, 0, 0.75), vector(0, 0, -1))
 
-  let c = w.color_at(r)
+  let c = w.color_at(r, 1)
   expect(c.equals(inner.material.color)).toBeTruthy()
 })
 
@@ -144,8 +145,35 @@ test("shade_hit() is given an intersection in shadow", () => {
   let r = new Ray(point(0, 0, 5), vector(0, 0, 1))
   let i = new Intersection(4, s2)
   let comps = prepare_computation(i, r)
-  let c = w.shade_hit(comps)
+  let c = w.shade_hit(comps, 1)
 
   expect(c.equals(vector(0.1, 0.1, 0.1))).toBeTruthy()
 })
 
+test("The reflected color for a reflective material", () => {
+  let w = default_world()
+  let shape = new Plane()
+  shape.material.reflective = 0.5
+  shape.translate(vector(0, -1, 0))
+  w.objects.push(shape)
+  let r = new Ray(point(0, 0, -3), vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2))
+  let i = new Intersection(Math.sqrt(2), shape)
+  let comps = prepare_computation(i, r)
+  let color = w.reflected_color(comps, 1)
+
+  expect(color.equals(vector(0.19032, 0.2379, 0.14274))).toBeTruthy()
+})
+
+test("shade_hit() with a reflective material", () => {
+  let w = default_world()
+  let shape = new Plane()
+  shape.material.reflective = 0.5
+  shape.translate(vector(0, -1, 0))
+  w.objects.push(shape)
+  let r = new Ray(point(0, 0, -3), vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2))
+  let i = new Intersection(Math.sqrt(2), shape)
+  let comps = prepare_computation(i, r)
+  let color = w.shade_hit(comps, 1)
+
+  expect(color.equals(vector(0.87677, 0.92436, 0.82918))).toBeTruthy()
+})

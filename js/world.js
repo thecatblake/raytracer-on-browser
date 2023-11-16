@@ -23,12 +23,14 @@ class World {
     return intersections.sort((a, b) => a.t - b.t)
   }
 
-  shade_hit(comps) {
+  shade_hit(comps, remaining) {
     let shadowed = this.is_shadowed(comps.over_point)
-    return lighting(comps.obj.material, comps.obj, this.light, comps.point, comps.eyev, comps.normalv, shadowed)
+    let surface = lighting(comps.obj.material, comps.obj, this.light, comps.point, comps.eyev, comps.normalv, shadowed)
+    let reflected = this.reflected_color(comps, remaining)
+    return surface.add(reflected)
   }
 
-  color_at(r) {
+  color_at(r, remaining=5) {
     let intersections = this.intersect(r)
     let hit = Intersection.hit(intersections)
 
@@ -36,7 +38,7 @@ class World {
       return vector(0, 0, 0)
 
     let comps = prepare_computation(hit, r)
-    return this.shade_hit(comps)
+    return this.shade_hit(comps, remaining)
   }
 
   is_shadowed(point) {
@@ -50,6 +52,17 @@ class World {
     let h = Intersection.hit(intersections)
 
     return h && h.t < distance;
+  }
+
+  reflected_color(comps, remaining=5) {
+    if(remaining <= 0)
+      return vector(0, 0, 0)
+    if (comps.obj.material.reflective === 0)
+      return vector(0, 0, 0)
+
+    let reflect_ray = new Ray(comps.over_point, comps.reflectv)
+    let color = this.color_at(reflect_ray, remaining-1)
+    return  color.sc_mul(comps.obj.material.reflective)
   }
 }
 
@@ -70,6 +83,7 @@ function prepare_computation(intersection, ray) {
     comps.normalv = comps.normalv.neg()
   }
 
+  comps.reflectv = ray.direction.reflect(comps.normalv)
   comps.over_point = Tuple.add(comps.point, comps.normalv.sc_mul(EPSILON))
 
   return comps

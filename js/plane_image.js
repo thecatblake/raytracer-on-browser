@@ -19,19 +19,23 @@ function draw_plane() {
   let floor = new Plane()
   floor.material.color = vector(1, 0.9, 0.9)
   floor.material.specular = 0
+  floor.material.reflective = 0.8
   floor.material.pattern = pattern
 
   let middle = new Sphere()
   middle.translate(vector(-0.5, 1, 0.5))
+  middle.material.reflective = 0.5
   middle.material.color = vector(0, 0, 1)
 
   let right = new Sphere()
   right.scale(vector(0.5, 0.5, 0.5)).translate(vector(1.5, 0.5, -0.5))
   right.material.color = vector(0, 1, 0)
+  //right.material.reflective = 0.5
 
   let left = new Sphere()
   left.scale(vector(0.33, 0.33, 0.33)).translate(vector(-1.5, 0.33, -0.75))
   left.material.color = vector(1, 0, 0)
+  //left.material.reflective = 0.5
 
   let light = new PointLight(point(-10, 10, -10), vector(1, 1, 1))
 
