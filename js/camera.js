@@ -47,7 +47,7 @@ class Camera {
     for (let y=0; y < this.vsize; y++) {
       for (let x=0; x < this.hsize; x++) {
         let ray = this.ray_for_pixel(x, y)
-        let c = w.color_at(ray)
+        let c = w.color_at(ray, 5)
         canvas.write_pixel(x, y, c)
       }
     }

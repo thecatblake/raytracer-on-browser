@@ -26,4 +26,12 @@ class Sphere extends Object3D {
   }
 }
 
-module.exports = {Sphere}
+class GlassSphere extends Sphere {
+  constructor() {
+    super()
+    this.material.transparency = 1.0
+    this.material.refractive_index = 1.5
+  }
+}
+
+module.exports = {Sphere, GlassSphere}

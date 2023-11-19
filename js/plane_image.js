@@ -18,13 +18,23 @@ function draw_plane() {
 
   let floor = new Plane()
   floor.material.color = vector(1, 0.9, 0.9)
-  floor.material.specular = 0
-  floor.material.reflective = 0.8
   floor.material.pattern = pattern
 
+  let left_wall = new Plane()
+  left_wall.rotate_x(Math.PI/2).rotate_y(-Math.PI/4).translate(vector(0, 0, 5))
+  left_wall.material = floor.material
+
+  let right_wall = new Plane()
+  right_wall.rotate_x(Math.PI/2).rotate_y(Math.PI/4).translate(vector(0, 0, 5))
+  right_wall.material = floor.material
+
   let middle = new Sphere()
-  middle.translate(vector(-0.5, 1, 0.5))
-  middle.material.reflective = 0.5
+  middle.translate(vector(0, 1, -5))
+  middle.material.transparency = 1.0
+  middle.material.refractive_index = 2
+  middle.material.reflective = 1.0
+  middle.material.specular = 0.0
+  middle.material.diffuse = 0.9
   middle.material.color = vector(0, 0, 1)
 
   let right = new Sphere()
@@ -42,7 +52,7 @@ function draw_plane() {
   let w = new World([floor, middle, right, left], light)
 
   let c = new Camera(canvas.h, canvas.w, Math.PI/3)
-  c.transform = view_transform(point(0, 1.5, -5), point(0, 1, 0), vector(0, 1, 0))
+  c.transform = view_transform(point(0, 1.5, -10), point(0, 1, 0), vector(0, 1, 0))
 
   c.render(canvas, w)
 

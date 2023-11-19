@@ -1,10 +1,11 @@
 const {PointLight} = require("../js/light");
 const {point, vector} = require("../js/tuple");
-const {Sphere} = require("../js/sphere");
+const {Sphere, GlassSphere} = require("../js/sphere");
 const {World, prepare_computation} = require("../js/world");
 const {Ray} = require("../js/ray");
 const {Intersection} = require("../js/intersection");
 const {Plane} = require("../js/plane");
+const {TestPattern} = require("../js/pattern");
 
 function default_world() {
   let light = new PointLight(point(-10, 10, -10), vector(1, 1, 1))
@@ -176,4 +177,102 @@ test("shade_hit() with a reflective material", () => {
   let color = w.shade_hit(comps, 1)
 
   expect(color.equals(vector(0.87677, 0.92436, 0.82918))).toBeTruthy()
+})
+
+test("Finding n1 and n2 at various intersections", () => {
+  let A = new GlassSphere()
+  A.scale(vector(2,2,2))
+  let B = new GlassSphere()
+  B.translate(vector(0, 0, -0.25))
+  B.material.refractive_index = 2.0
+  let C = new GlassSphere()
+  C.translate(vector(0, 0, 0.25))
+  C.material.refractive_index = 2.5
+  let r = new Ray(point(0, 0, -4), vector(0, 0, 1))
+  let xs = [
+    new Intersection(2, A),
+    new Intersection(2.75, B),
+    new Intersection(3.25, C),
+    new Intersection(4.75, B),
+    new Intersection(5.25, C),
+    new Intersection(6, A)
+  ]
+
+  let ts =
+    [
+    [0, 1.0, 1.5],
+      [1, 1.5, 2.0],
+      [2, 2.0, 2.5],
+      [3, 2.5, 2.5],
+      [4, 2.5, 1.5],
+      [5, 1.5, 1.0]
+  ]
+
+  ts.forEach(t => {
+    let comps = prepare_computation(xs[t[0]], r, xs)
+
+    expect(comps.n1).toBe(t[1])
+    expect(comps.n2).toBe(t[2])
+  })
+})
+
+test("The refracted color under total internal reflection", () => {
+  let w = default_world()
+  let shape = w.objects[0]
+  shape.material.transparency = 1.0
+  shape.material.refractive_index = 1.5
+  let r = new Ray(point(0, 0, Math.sqrt(2)/2), vector(0, 1, 0))
+  let xs = [
+    new Intersection(-Math.sqrt(2)/2, shape),
+    new Intersection(Math.sqrt(2)/2, shape)
+  ]
+
+  let comps = prepare_computation(xs[1], r, xs)
+  let c = w.refracted_color(comps, 5)
+
+  expect(c).toEqual(vector(0, 0, 0))
+})
+
+test("The refracted color with a refracted ray", () => {
+  let w = default_world()
+  let A = w.objects[0]
+  A.material.ambient = 1.0
+  A.material.pattern = new TestPattern()
+  let B = w.objects[1]
+  B.material.transparency = 1.0
+  B.material.refractive_index = 1.5
+  let r = new Ray(point(0, 0, 0.1), vector(0, 1, 0))
+  let xs = [
+    new Intersection(-0.9899, A),
+    new Intersection(-0.4899, B),
+    new Intersection(0.4899, B),
+    new Intersection(0.9899, A)
+  ]
+  let comps = prepare_computation(xs[2], r, xs)
+  let c = w.refracted_color(comps, 5)
+
+  expect(c.equals(vector(0, 0.99888, 0.04725)))
+})
+
+test("shade_hit() with a transparent material", () => {
+  let w = default_world()
+  let floor = new Plane()
+  floor.translate(vector(0, -1, 0))
+  floor.material.transparency = 0.5
+  floor.material.refractive_index = 1.5
+  let ball = new Sphere()
+  ball.material.color = vector(1, 0, 0)
+  ball.material.ambient = 0.5
+  ball.translate(vector(0, -2.5, -0.5))
+  w.objects.push(floor)
+  w.objects.push(ball)
+
+  let r = new Ray(point(0, 0, -3), vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2))
+  let xs = [
+    new Intersection(Math.sqrt(2), floor)
+  ]
+  let comps = prepare_computation(xs[0], r, xs)
+  let color = w.shade_hit(comps, 5)
+
+  expect(color.equals(vector(0.93642, 0.68642, 0.68642)))
 })

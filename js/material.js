@@ -8,7 +8,7 @@ class Material {
   shininess = 200
   reflective = 0.0
   transparency = 0.0
-  refractive_index = 0.0
+  refractive_index = 1.0
   pattern = null
 
   constructor(color, ambient, diffuse, specular, shininess, pattern=null) {
