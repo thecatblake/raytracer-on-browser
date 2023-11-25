@@ -1,8 +1,13 @@
-const {Tuple, vector} = require("./tuple");
-const {lighting} = require("./light");
-const {Intersection} = require("./intersection");
-const {Ray} = require("./ray");
-const {EPSILON} = require("./util");
+import {Tuple, vector} from "./tuple";
+
+import {lighting} from "./light";
+
+import {Intersection} from "./intersection";
+
+import {Ray} from "./ray";
+
+import {EPSILON} from "./util";
+
 
 class World {
   objects = []
@@ -158,4 +163,4 @@ function schlick(comps) {
   return r0 + (1 - r0) * (1 - cos) ** 5
 }
 
-module.exports = {World, prepare_computation}
+export {World, prepare_computation}

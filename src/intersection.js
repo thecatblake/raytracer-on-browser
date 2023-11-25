@@ -21,4 +21,4 @@ class Intersection {
   }
 }
 
-module.exports = {Intersection}
+export {Intersection};

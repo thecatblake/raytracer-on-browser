@@ -1,5 +1,6 @@
-const {vector} = require("./tuple");
-const {identity} = require("./matrix");
+import {vector} from "./tuple";
+
+import {identity} from "./matrix";
 
 
 class Pattern {
@@ -45,4 +46,4 @@ class StripePattern {
 }
 
 
-module.exports = {TestPattern, StripePattern}
+export {TestPattern, StripePattern};

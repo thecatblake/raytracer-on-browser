@@ -1,5 +1,7 @@
-const {Tuple} = require("./tuple");
-const {compare_double} = require("./util");
+import {Tuple} from "./tuple";
+
+import {compare_double} from "./util";
+
 
 class Matrix {
   elements = null
@@ -293,4 +295,4 @@ function view_transform(from, to, up) {
   return orientation.mul(translation_matrix(from.neg()))
 }
 
-module.exports = {Matrix, identity, translation_matrix, scaling_matrix, rotation_x_matrix, rotation_y_matrix, rotation_z_matrix, view_transform}
+export {Matrix, identity, translation_matrix, scaling_matrix, rotation_x_matrix, rotation_y_matrix, rotation_z_matrix, view_transform};

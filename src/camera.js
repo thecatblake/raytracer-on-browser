@@ -1,6 +1,9 @@
-const {identity} = require("./matrix");
-const {point, Tuple} = require("./tuple");
-const {Ray} = require("./ray");
+import {identity} from "./matrix";
+
+import {point, Tuple} from "./tuple";
+
+import {Ray} from "./ray";
+
 
 class Camera {
   hsize = 0
@@ -54,4 +57,4 @@ class Camera {
   }
 }
 
-module.exports = {Camera}
+export {Camera};

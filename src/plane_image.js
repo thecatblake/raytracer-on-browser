@@ -1,12 +1,21 @@
-const {Canvas} = require("./canvas");
-const {point, vector} = require("./tuple");
-const {Sphere} = require("./sphere");
-const {PointLight} = require("./light");
-const {World} = require("./world");
-const {Camera} = require("./camera");
-const {view_transform, scaling_matrix} = require("./matrix");
-const {Plane} = require("./plane");
-const {StripePattern} = require("./pattern");
+import {Canvas} from "./canvas";
+
+import {point, vector} from "./tuple";
+
+import {Sphere} from "./sphere";
+
+import {PointLight} from "./light";
+
+import {World} from "./world";
+
+import {Camera} from "./camera";
+
+import {scaling_matrix, view_transform} from "./matrix";
+
+import {Plane} from "./plane";
+
+import {StripePattern} from "./pattern";
+
 
 function draw_plane() {
   const canvasElement = document.getElementById("canvas")
@@ -60,4 +69,4 @@ function draw_plane() {
 }
 
 
-module.exports = {draw_plane}
+export {draw_plane};

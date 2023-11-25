@@ -1,12 +1,14 @@
-const {
+import {
   identity,
   rotation_x_matrix,
   rotation_y_matrix,
   rotation_z_matrix,
   scaling_matrix,
   translation_matrix
-} = require("./matrix")
-const {Material} = require("./material");
+} from "./matrix";
+
+import {Material} from "./material";
+
 
 class Object3D {
   transform = identity
@@ -60,4 +62,4 @@ class Object3D {
   }
 }
 
-module.exports = {Object3D}
+export {Object3D};

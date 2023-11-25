@@ -1,4 +1,5 @@
-const {Tuple, vector} = require("./tuple");
+import {Tuple, vector} from "./tuple";
+
 
 class PointLight {
   position = null
@@ -49,4 +50,4 @@ function lighting(material, obj, light, point, eyev, normalv, in_shadow=false) {
 }
 
 
-module.exports = {PointLight, lighting}
+export {PointLight, lighting};

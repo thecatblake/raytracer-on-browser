@@ -1,10 +1,18 @@
-const {Canvas} = require("./canvas");
-const {point, vector} = require("./tuple");
-const {Sphere} = require("./sphere");
-const {PointLight} = require("./light");
-const {World} = require("./world");
-const {Camera} = require("./camera");
-const {view_transform} = require("./matrix");
+import {Canvas} from "./canvas";
+
+import {Sphere} from "./sphere";
+
+import {point, vector} from "./tuple";
+
+
+import {PointLight} from "./light";
+
+import {World} from "./world";
+
+import {Camera} from "./camera";
+
+import {view_transform} from "./matrix";
+
 
 function draw_sphere() {
   const canvasElement = document.getElementById("canvas")
@@ -49,4 +57,4 @@ function draw_sphere() {
 }
 
 
-module.exports = {draw_sphere}
+export {draw_sphere}

@@ -1,4 +1,5 @@
-const {Tuple} = require("./tuple")
+import {Tuple} from "./tuple";
+
 
 class Ray {
   origin = null
@@ -17,4 +18,4 @@ class Ray {
   }
 }
 
-module.exports = {Ray}
+export {Ray}

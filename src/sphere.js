@@ -1,6 +1,9 @@
-const {Object3D} = require("./object3d");
-const {Tuple} = require("./tuple");
-const {Intersection} = require("./intersection");
+import {Object3D} from "./object3d";
+
+import {Tuple} from "./tuple";
+
+import {Intersection} from "./intersection";
+
 
 class Sphere extends Object3D {
   local_intersect(ray) {
@@ -34,4 +37,4 @@ class GlassSphere extends Sphere {
   }
 }
 
-module.exports = {Sphere, GlassSphere}
+export {Sphere, GlassSphere}

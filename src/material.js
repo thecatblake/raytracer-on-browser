@@ -1,4 +1,5 @@
-const {vector} = require("./tuple");
+import {vector} from "./tuple";
+
 
 class Material {
   color = vector(1, 1, 1)
@@ -27,4 +28,4 @@ class Material {
   }
 }
 
-module.exports = {Material}
+export {Material};

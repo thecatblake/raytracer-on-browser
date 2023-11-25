@@ -1,5 +1,7 @@
-const {point, vector} = require("./tuple");
-const {Canvas} = require("./canvas")
+import {point, vector} from "./tuple";
+
+import {Canvas} from "./canvas";
+
 
 function draw_trajectory() {
   const canvasElement = document.getElementById("canvas")
@@ -22,4 +24,4 @@ function draw_trajectory() {
   canvas.draw()
 }
 
-module.exports = {draw_trajectory}
+export {draw_trajectory}

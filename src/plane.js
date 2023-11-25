@@ -1,7 +1,11 @@
-const {Object3D} = require("./object3d");
-const {EPSILON} = require("./util");
-const {Intersection} = require("./intersection");
-const {vector} = require("./tuple");
+import {Object3D} from "./object3d";
+
+import {EPSILON} from "./util";
+
+import {Intersection} from "./intersection";
+
+import {vector} from "./tuple";
+
 
 class Plane extends Object3D {
   local_intersect(ray) {
@@ -18,4 +22,4 @@ class Plane extends Object3D {
   }
 }
 
-module.exports = {Plane}
+export {Plane};

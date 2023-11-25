@@ -1,4 +1,5 @@
-const {compare_double} = require("./util");
+import {compare_double} from "./util";
+
 
 class Tuple {
   x = 0;
@@ -102,4 +103,4 @@ function vector(x, y, z) {
   return new Tuple(x, y, z, 0)
 }
 
-module.exports = {Tuple, point, vector}
+export {Tuple, point, vector}

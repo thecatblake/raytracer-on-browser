@@ -1,4 +1,5 @@
-const {vector} = require("./tuple");
+import {vector} from "./tuple";
+
 
 class Canvas {
   w = 0
@@ -47,4 +48,4 @@ class Canvas {
 }
 
 
-module.exports = {Canvas}
+export {Canvas};
